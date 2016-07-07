@@ -57,19 +57,21 @@ public class StudentRepositoryImpl implements StudentRepository {
         Workbook book = WorkbookFactory.create(excel);
         Sheet workSheet = book.getSheet("学生信息");
         for (int index = workSheet.getFirstRowNum() + 1; index <= workSheet.getLastRowNum(); index++) {
-            Row row = workSheet.getRow(index);
-            String name = row.getCell(0).getRichStringCellValue().getString();
-            String idCard = row.getCell(1).getRichStringCellValue().getString();
-            String studentId = row.getCell(2).getRichStringCellValue().getString();
-            String major = row.getCell(3).getRichStringCellValue().getString();
-            Integer bell = Integer.valueOf(row.getCell(4).getRichStringCellValue().getString());
-            Integer ems = Integer.valueOf(row.getCell(5).getRichStringCellValue().getString());
-            Student student = new Student(name, major, bell, ems);
             try {
+                Row row = workSheet.getRow(index);
+                String name = row.getCell(0).getRichStringCellValue().getString();
+                String idCard = row.getCell(1).getRichStringCellValue().getString();
+                String studentId = row.getCell(2).getRichStringCellValue().getString();
+                String major = row.getCell(3).getRichStringCellValue().getString();
+                Integer bell = Integer.valueOf(row.getCell(4).getRichStringCellValue().getString());
+                Integer ems = Integer.valueOf(row.getCell(5).getRichStringCellValue().getString());
+                Student student = new Student(name, major, bell, ems);
+                if (name == null || idCard == null || studentId == null || major == null || bell == null) {
+                    throw new IOException("Error Occurs at line " + (index + 1) + " Stops");
+                }
                 saveStudent(student, studentId, idCard);
             } catch (Exception e) {
-//                e.printStackTrace();
-                throw new IOException("Error Occurs at " + index);
+                throw new IOException("Error Occurs at line " + (index + 1) + " Stops");
             }
         }
     }
