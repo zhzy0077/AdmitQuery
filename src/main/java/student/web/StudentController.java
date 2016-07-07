@@ -10,6 +10,8 @@ import student.model.Message;
 import student.model.Student;
 import student.repository.StudentRepository;
 
+import javax.servlet.http.HttpSession;
+
 /**
  * Created by Zheng on 16/7/7.
  */
@@ -27,9 +29,14 @@ public class StudentController {
     public
     @ResponseBody
     Message message(@RequestParam(name = "studentId") String studentId,
-                    @RequestParam(name = "idCard") String idCard) {
+                    @RequestParam(name = "idCard") String idCard,
+                    @RequestParam(name = "captcha") String captcha, HttpSession session) {
         Student student = null;
         Message message = new Message();
+        if (!captcha.equals(session.getAttribute("token"))) {
+            message.setError_code(2);
+            return message;
+        }
         try {
             student = studentRepository.findStudent(studentId, idCard);
             message.setError_code(0);
