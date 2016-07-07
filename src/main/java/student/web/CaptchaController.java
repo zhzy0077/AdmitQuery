@@ -20,6 +20,7 @@ import java.util.Random;
 public class CaptchaController {
     @RequestMapping(method = RequestMethod.GET)
     public void captcha(HttpServletRequest request, HttpServletResponse response) {
+        response.setContentType("image/jpeg");
         Cage cage = new GCage();
         Random random = new Random();
         String token = String.valueOf(Math.abs(random.nextInt()) % 9000 + 1000);
