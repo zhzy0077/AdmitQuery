@@ -5,6 +5,8 @@ package student.model;
  */
 public class Student {
     private String name;
+    private String studentId;
+    private String idCard;
     private String major;
     private Integer bell;
     private Integer ems;
@@ -12,8 +14,10 @@ public class Student {
     public Student() {
     }
 
-    public Student(String name, String major, Integer bell, Integer ems) {
+    public Student(String name, String studentId, String idCard, String major, Integer bell, Integer ems) {
         this.name = name;
+        this.studentId = studentId;
+        this.idCard = idCard;
         this.major = major;
         this.bell = bell;
         this.ems = ems;
@@ -49,5 +53,21 @@ public class Student {
 
     public void setEms(Integer ems) {
         this.ems = ems;
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
     }
 }

@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
 import student.repository.StudentRepository;
 
+import javax.servlet.http.HttpSession;
+
 /**
  * Created by Zheng on 16/7/7.
  */
@@ -22,7 +24,10 @@ public class ExcelUploadController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String uploadFile(@RequestPart("file") byte[] file, Model model) {
+    public String uploadFile(@RequestPart("file") byte[] file, Model model, HttpSession session) {
+        if (session.getAttribute("loginUsername") == null) {
+            return "redirect:/admin";
+        }
         if (file != null && file.length != 0) {
             try {
                 studentRepository.saveInformation(file);

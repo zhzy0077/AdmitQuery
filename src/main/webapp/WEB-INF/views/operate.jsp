@@ -47,6 +47,7 @@
         <tr>
             <th width="10%">姓名</th>
             <th width="20%">考生号</th>
+            <th width="20%">身份证</th>
             <th>专业</th>
             <th>是否具有贝尔学院资格</th>
             <th>ems</th>
@@ -54,7 +55,8 @@
         </tr>
         <tr>
             <td width="7%"><c:out value="${student.name}"/></td>
-            <td width="8%" id="studentId"><c:out value="${studentId}"/></td>
+            <td width="20%" id="studentId"><c:out value="${student.studentId}"/></td>
+            <td width="20%"><c:out value="${student.idCard}"/></td>
             <td><c:out value="${student.major}"/></td>
             <td><c:out value="${student.bell}"/></td>
             <td><c:out value="${student.ems}"/></td>
@@ -66,11 +68,11 @@
 <script src="<c:url value="/js/jquery-1.11.3.min.js"/>"></script>
 <script type="text/javascript">
     function del() {
-        question = confirm("你确认要删除此条记录吗？");
+        var question = confirm("你确认要删除此条记录吗？");
         if (question) {
-            studenId = $("#studentId").html();
+            var studentId = $("#studentId").html();
             $.post("<c:url value="/delete"/>",
-                    {"studentId": studenId},
+                    {"studentId": studentId},
                     function (back) {
                         if (back.status == 0) {
                             alert("删除成功！");

@@ -29,7 +29,7 @@
       </column>
       <column id="8" parent="2" name="major">
         <mandatory>1</mandatory>
-        <data-type>varchar(15)</data-type>
+        <data-type>varchar(30)</data-type>
       </column>
       <column id="9" parent="2" name="bell">
         <mandatory>1</mandatory>
@@ -39,27 +39,36 @@
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <key id="11" parent="2" name="PRIMARY">
+      <index id="11" parent="2" name="student_info_studentId_uindex">
+        <columns>studentId</columns>
+        <desc-columns></desc-columns>
+        <unique>1</unique>
+      </index>
+      <key id="12" parent="2" name="PRIMARY">
         <columns>uid</columns>
         <primary>1</primary>
       </key>
-      <column id="12" parent="3" name="uid">
+      <key id="13" parent="2" name="student_info_studentId_uindex">
+        <columns>studentId</columns>
+        <underlying-index>student_info_studentId_uindex</underlying-index>
+      </key>
+      <column id="14" parent="3" name="uid">
         <mandatory>1</mandatory>
         <data-type>int(10)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="13" parent="3" name="username">
+      <column id="15" parent="3" name="username">
         <mandatory>1</mandatory>
         <data-type>varchar(20)</data-type>
       </column>
-      <column id="14" parent="3" name="password">
+      <column id="16" parent="3" name="password">
         <mandatory>1</mandatory>
         <data-type>varchar(50)</data-type>
       </column>
-      <column id="15" parent="3" name="name">
+      <column id="17" parent="3" name="name">
         <data-type>varchar(15)</data-type>
       </column>
-      <key id="16" parent="3" name="PRIMARY">
+      <key id="18" parent="3" name="PRIMARY">
         <columns>uid</columns>
         <primary>1</primary>
       </key>

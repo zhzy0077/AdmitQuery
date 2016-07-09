@@ -28,6 +28,7 @@ public class RootConfig {
 //        dataSource.setUsername("zhzy0077");
 //        dataSource.setPassword("960215");
         dataSource.setInitialSize(10);
+
         return dataSource;
     }
 

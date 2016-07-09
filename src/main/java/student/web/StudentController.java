@@ -33,14 +33,17 @@ public class StudentController {
                     @RequestParam(name = "captcha") String captcha, HttpSession session) {
         Student student = null;
         Message message = new Message();
-        System.out.println(captcha);
         if (!captcha.equals(session.getAttribute("token"))) {
             message.setError_code(2);
             return message;
         }
         try {
             student = studentRepository.findStudent(studentId, idCard);
-            message.setError_code(0);
+            if (student == null) {
+                message.setError_code(1);
+            } else {
+                message.setError_code(0);
+            }
         } catch (Exception e1) {
             e1.printStackTrace();
             message.setError_code(1);

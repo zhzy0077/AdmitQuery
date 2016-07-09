@@ -6,6 +6,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -31,44 +33,75 @@ public class StudentRepositoryImpl implements StudentRepository {
 
     @Override
     public Student findStudent(String studentId, String idCard) {
-        String SELECT_STUDENT = "SELECT name, major, bell, ems FROM student.student_info WHERE studentId = ? AND idCard = ?";
-        return jdbcOperations.queryForObject(SELECT_STUDENT, new RowMapper<Student>() {
-            @Override
-            public Student mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return resultSetToStudent(rs);
-            }
-        }, studentId, idCard);
+        final String SELECT_STUDENT = "SELECT * FROM student.student_info WHERE studentId = ? AND idCard = ?";
+        try {
+            return jdbcOperations.queryForObject(SELECT_STUDENT, new RowMapper<Student>() {
+                @Override
+                public Student mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    return resultSetToStudent(rs);
+                }
+            }, studentId, idCard);
+        } catch (DataAccessException e) {
+            return null;
+        }
     }
 
     @Override
     public Student findStudentById(String studentId) {
-        String SELECT_STUDENT = "SELECT name, major, bell, ems FROM student.student_info WHERE studentId = ?";
-        return jdbcOperations.queryForObject(SELECT_STUDENT, new RowMapper<Student>() {
-            @Override
-            public Student mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return resultSetToStudent(rs);
-            }
-        }, studentId);
+        final String SELECT_STUDENT = "SELECT * FROM student.student_info WHERE studentId = ?";
+        try {
+            return jdbcOperations.queryForObject(SELECT_STUDENT, new RowMapper<Student>() {
+                @Override
+                public Student mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    return resultSetToStudent(rs);
+                }
+            }, studentId);
+        } catch (DataAccessException e) {
+            return null;
+        }
     }
 
     @Override
     public Boolean deleteStudent(String studentId) {
-        String DELETE_STUDENT = "DELETE FROM student.student_info WHERE studentId = ?";
-        return jdbcOperations.update(DELETE_STUDENT, studentId) == 1;
+        final String DELETE_STUDENT = "DELETE FROM student.student_info WHERE studentId = ?";
+        try {
+            return jdbcOperations.update(DELETE_STUDENT, studentId) == 1;
+        } catch (DataAccessException e) {
+            return false;
+        }
     }
 
     private Student resultSetToStudent(ResultSet rs) throws SQLException {
         String name = rs.getString("name");
+        String studentId = rs.getString("studentId");
+        String idCard = rs.getString("idCard");
         String major = rs.getString("major");
         Integer bell = rs.getInt("bell");
         Integer ems = rs.getInt("ems");
-        return new Student(name, major, bell, ems);
+        return new Student(name, studentId, idCard, major, bell, ems);
     }
 
-    private void saveStudent(Student student, String studentId, String idCard) {
+    private void saveStudent(Student student) {
 //        System.out.println("Saving " + student.getName() + studentId + idCard + student.getMajor() + student.getBell() + student.getEms());
-        String SAVE_STUDENT = "INSERT INTO student.student_info (name, studentId, idCard, major, bell, ems) VALUES (?, ?, ?, ?, ?, ?)";
-        jdbcOperations.update(SAVE_STUDENT, student.getName(), studentId, idCard, student.getMajor(), student.getBell(), student.getEms());
+        final String SAVE_STUDENT = "INSERT INTO student.student_info (name, studentId, idCard, major, bell, ems) VALUES (?, ?, ?, ?, ?, ?)";
+        final String UPDATE_STUDENT = "UPDATE student.student_info SET name = ?, idCard = ?, major = ?, bell = ?, ems = ? WHERE studentId = ?";
+        try {
+            jdbcOperations.update(SAVE_STUDENT,
+                    student.getName(),
+                    student.getStudentId(),
+                    student.getIdCard(),
+                    student.getMajor(),
+                    student.getBell(),
+                    student.getEms());
+        } catch (DuplicateKeyException e) {
+            jdbcOperations.update(UPDATE_STUDENT,
+                    student.getName(),
+                    student.getIdCard(),
+                    student.getMajor(),
+                    student.getBell(),
+                    student.getEms(),
+                    student.getStudentId());
+        }
     }
 
     @Override
@@ -87,11 +120,11 @@ public class StudentRepositoryImpl implements StudentRepository {
                 Integer ems = null;
                 if (row.getCell(5) != null)
                     ems = Integer.valueOf(row.getCell(5).getStringCellValue());
-                Student student = new Student(name, major, bell, ems);
+                Student student = new Student(name, studentId, idCard, major, bell, ems);
                 if (name == null || idCard == null || studentId == null || major == null || bell == null) {
                     throw new IOException("Error Occurs at line " + (index + 1) + " Stops");
                 }
-                saveStudent(student, studentId, idCard);
+                saveStudent(student);
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new IOException("Error Occurs at line " + (index + 1) + " Stops");

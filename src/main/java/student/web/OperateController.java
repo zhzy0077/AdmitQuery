@@ -44,7 +44,6 @@ public class OperateController {
         try {
             Student student = studentRepository.findStudentById(studentId);
             model.addAttribute("student", student);
-            model.addAttribute("studentId", studentId);
         } catch (Exception ignored) {
         }
         return "operate";
