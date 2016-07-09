@@ -9,36 +9,57 @@
     <database-model serializer="dbm" rdbms="MYSQL" format-version="2.5">
       <schema id="1" name="student"/>
       <table id="2" parent="1" name="student_info"/>
-      <column id="3" parent="2" name="uid">
+      <table id="3" parent="1" name="administrator"/>
+      <column id="4" parent="2" name="uid">
         <mandatory>1</mandatory>
         <data-type>int(10)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="4" parent="2" name="name">
+      <column id="5" parent="2" name="name">
         <mandatory>1</mandatory>
         <data-type>varchar(20)</data-type>
       </column>
-      <column id="5" parent="2" name="studentId">
+      <column id="6" parent="2" name="studentId">
         <mandatory>1</mandatory>
         <data-type>varchar(20)</data-type>
       </column>
-      <column id="6" parent="2" name="idCard">
+      <column id="7" parent="2" name="idCard">
         <mandatory>1</mandatory>
         <data-type>varchar(50)</data-type>
       </column>
-      <column id="7" parent="2" name="major">
+      <column id="8" parent="2" name="major">
         <mandatory>1</mandatory>
         <data-type>varchar(15)</data-type>
       </column>
-      <column id="8" parent="2" name="bell">
+      <column id="9" parent="2" name="bell">
         <mandatory>1</mandatory>
         <data-type>int(10)</data-type>
       </column>
-      <column id="9" parent="2" name="ems">
+      <column id="10" parent="2" name="ems">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <key id="10" parent="2" name="PRIMARY">
+      <key id="11" parent="2" name="PRIMARY">
+        <columns>uid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="12" parent="3" name="uid">
+        <mandatory>1</mandatory>
+        <data-type>int(10)</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="13" parent="3" name="username">
+        <mandatory>1</mandatory>
+        <data-type>varchar(20)</data-type>
+      </column>
+      <column id="14" parent="3" name="password">
+        <mandatory>1</mandatory>
+        <data-type>varchar(50)</data-type>
+      </column>
+      <column id="15" parent="3" name="name">
+        <data-type>varchar(15)</data-type>
+      </column>
+      <key id="16" parent="3" name="PRIMARY">
         <columns>uid</columns>
         <primary>1</primary>
       </key>

@@ -2,11 +2,10 @@ package student.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.ResponseBody;
-import student.model.UploadStatus;
 import student.repository.StudentRepository;
 
 /**
@@ -23,23 +22,18 @@ public class ExcelUploadController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public
-    @ResponseBody
-    UploadStatus uploadFile(@RequestPart("file") byte[] file) {
-        UploadStatus uploadStatus = new UploadStatus();
+    public String uploadFile(@RequestPart("file") byte[] file, Model model) {
         if (file != null && file.length != 0) {
             try {
                 studentRepository.saveInformation(file);
-                uploadStatus.setResult(true);
+                model.addAttribute("status", "上传成功");
             } catch (Exception e) {
-                uploadStatus.setResult(false);
-                uploadStatus.setErrorMessage(e.getMessage());
                 e.printStackTrace();
+                model.addAttribute("status", "上传失败, " + e.getMessage());
             }
         } else {
-            uploadStatus.setResult(false);
-            uploadStatus.setErrorMessage("file does not exist");
+            model.addAttribute("status", "上传失败, 文件为空");
         }
-        return uploadStatus;
+        return "uploadResult";
     }
 }

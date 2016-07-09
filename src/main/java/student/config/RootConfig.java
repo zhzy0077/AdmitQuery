@@ -23,10 +23,10 @@ public class RootConfig {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost:3306/student?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&useSSL=false");
-//        dataSource.setUsername("root");
-//        dataSource.setPassword("ZHZYzhzy960215.");
-        dataSource.setUsername("zhzy0077");
-        dataSource.setPassword("960215");
+        dataSource.setUsername("root");
+        dataSource.setPassword("ZHZYzhzy960215");
+//        dataSource.setUsername("zhzy0077");
+//        dataSource.setPassword("960215");
         dataSource.setInitialSize(10);
         return dataSource;
     }

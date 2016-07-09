@@ -26,6 +26,6 @@ public class StudentWebAppInitializer extends AbstractAnnotationConfigDispatcher
 
     @Override
     protected void customizeRegistration(ServletRegistration.Dynamic registration) {
-        registration.setMultipartConfig(new MultipartConfigElement("/tmp/uploads"));
+        registration.setMultipartConfig(new MultipartConfigElement("/tmp"));
     }
 }

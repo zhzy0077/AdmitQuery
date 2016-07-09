@@ -16,7 +16,6 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-expression:4.3.1.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-jdbc:4.3.1.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-tx:4.3.1.RELEASE" />
-          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-servlet-api:8.0.33" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.7.5" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.7.0" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.7.5" />
@@ -32,6 +31,9 @@
           <element id="library" level="project" name="Maven: stax:stax-api:1.0.1" />
           <element id="library" level="project" name="Maven: com.github.virtuald:curvesapi:1.03" />
           <element id="library" level="project" name="Maven: com.github.cage:cage:1.0" />
+          <element id="library" level="project" name="Maven: org.apache.taglibs:taglibs-standard-impl:1.2.5" />
+          <element id="library" level="project" name="Maven: org.apache.taglibs:taglibs-standard-jstlel:1.2.5" />
+          <element id="library" level="project" name="Maven: org.apache.taglibs:taglibs-standard-spec:1.2.5" />
         </element>
       </element>
       <element id="directory" name="META-INF">

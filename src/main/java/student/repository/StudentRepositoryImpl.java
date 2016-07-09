@@ -22,8 +22,6 @@ import java.sql.SQLException;
  */
 @Repository
 public class StudentRepositoryImpl implements StudentRepository {
-    private final String SELECT_STUDENT = "SELECT name, major, bell, ems FROM student.student_info WHERE studentId = ? AND idCard = ?";
-    private final String SAVE_STUDENT = "INSERT INTO student.student_info (name, studentId, idCard, major, bell, ems) VALUES (?, ?, ?, ?, ?, ?)";
     private JdbcOperations jdbcOperations;
 
     @Autowired
@@ -33,21 +31,43 @@ public class StudentRepositoryImpl implements StudentRepository {
 
     @Override
     public Student findStudent(String studentId, String idCard) {
-        Student student = jdbcOperations.queryForObject(SELECT_STUDENT, new RowMapper<Student>() {
+        String SELECT_STUDENT = "SELECT name, major, bell, ems FROM student.student_info WHERE studentId = ? AND idCard = ?";
+        return jdbcOperations.queryForObject(SELECT_STUDENT, new RowMapper<Student>() {
             @Override
             public Student mapRow(ResultSet rs, int rowNum) throws SQLException {
-                String name = rs.getString("name");
-                String major = rs.getString("major");
-                Integer bell = rs.getInt("bell");
-                Integer ems = rs.getInt("ems");
-                return new Student(name, major, bell, ems);
+                return resultSetToStudent(rs);
             }
         }, studentId, idCard);
-        return student;
+    }
+
+    @Override
+    public Student findStudentById(String studentId) {
+        String SELECT_STUDENT = "SELECT name, major, bell, ems FROM student.student_info WHERE studentId = ?";
+        return jdbcOperations.queryForObject(SELECT_STUDENT, new RowMapper<Student>() {
+            @Override
+            public Student mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return resultSetToStudent(rs);
+            }
+        }, studentId);
+    }
+
+    @Override
+    public Boolean deleteStudent(String studentId) {
+        String DELETE_STUDENT = "DELETE FROM student.student_info WHERE studentId = ?";
+        return jdbcOperations.update(DELETE_STUDENT, studentId) == 1;
+    }
+
+    private Student resultSetToStudent(ResultSet rs) throws SQLException {
+        String name = rs.getString("name");
+        String major = rs.getString("major");
+        Integer bell = rs.getInt("bell");
+        Integer ems = rs.getInt("ems");
+        return new Student(name, major, bell, ems);
     }
 
     private void saveStudent(Student student, String studentId, String idCard) {
-        System.out.println("Saving " + student.getName() + studentId + idCard + student.getMajor() + student.getBell() + student.getEms());
+//        System.out.println("Saving " + student.getName() + studentId + idCard + student.getMajor() + student.getBell() + student.getEms());
+        String SAVE_STUDENT = "INSERT INTO student.student_info (name, studentId, idCard, major, bell, ems) VALUES (?, ?, ?, ?, ?, ?)";
         jdbcOperations.update(SAVE_STUDENT, student.getName(), studentId, idCard, student.getMajor(), student.getBell(), student.getEms());
     }
 
@@ -59,18 +79,21 @@ public class StudentRepositoryImpl implements StudentRepository {
         for (int index = workSheet.getFirstRowNum() + 1; index <= workSheet.getLastRowNum(); index++) {
             try {
                 Row row = workSheet.getRow(index);
-                String name = row.getCell(0).getRichStringCellValue().getString();
-                String idCard = row.getCell(1).getRichStringCellValue().getString();
-                String studentId = row.getCell(2).getRichStringCellValue().getString();
-                String major = row.getCell(3).getRichStringCellValue().getString();
-                Integer bell = Integer.valueOf(row.getCell(4).getRichStringCellValue().getString());
-                Integer ems = Integer.valueOf(row.getCell(5).getRichStringCellValue().getString());
+                String name = row.getCell(0).getStringCellValue();
+                String idCard = row.getCell(1).getStringCellValue();
+                String studentId = row.getCell(2).getStringCellValue();
+                String major = row.getCell(3).getStringCellValue();
+                Integer bell = Integer.valueOf(row.getCell(4).getStringCellValue());
+                Integer ems = null;
+                if (row.getCell(5) != null)
+                    ems = Integer.valueOf(row.getCell(5).getStringCellValue());
                 Student student = new Student(name, major, bell, ems);
                 if (name == null || idCard == null || studentId == null || major == null || bell == null) {
                     throw new IOException("Error Occurs at line " + (index + 1) + " Stops");
                 }
                 saveStudent(student, studentId, idCard);
             } catch (Exception e) {
+                e.printStackTrace();
                 throw new IOException("Error Occurs at line " + (index + 1) + " Stops");
             }
         }

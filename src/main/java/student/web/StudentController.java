@@ -33,6 +33,7 @@ public class StudentController {
                     @RequestParam(name = "captcha") String captcha, HttpSession session) {
         Student student = null;
         Message message = new Message();
+        System.out.println(captcha);
         if (!captcha.equals(session.getAttribute("token"))) {
             message.setError_code(2);
             return message;

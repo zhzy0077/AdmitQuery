@@ -13,5 +13,9 @@ import java.io.IOException;
 public interface StudentRepository {
     Student findStudent(String studentId, String idCard);
 
+    Student findStudentById(String studentId);
+
+    Boolean deleteStudent(String studentId);
+
     void saveInformation(byte[] uploadExcel) throws IOException, InvalidFormatException;
 }
