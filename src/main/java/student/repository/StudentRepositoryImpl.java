@@ -77,7 +77,7 @@ public class StudentRepositoryImpl implements StudentRepository {
         String idCard = rs.getString("idCard");
         String major = rs.getString("major");
         Integer bell = rs.getInt("bell");
-        Integer ems = rs.getInt("ems");
+        String ems = rs.getString("ems");
         return new Student(name, studentId, idCard, major, bell, ems);
     }
 
@@ -117,9 +117,9 @@ public class StudentRepositoryImpl implements StudentRepository {
                 String studentId = row.getCell(2).getStringCellValue();
                 String major = row.getCell(3).getStringCellValue();
                 Integer bell = Integer.valueOf(row.getCell(4).getStringCellValue());
-                Integer ems = null;
+                String ems = null;
                 if (row.getCell(5) != null)
-                    ems = Integer.valueOf(row.getCell(5).getStringCellValue());
+                    ems = row.getCell(5).getStringCellValue();
                 Student student = new Student(name, studentId, idCard, major, bell, ems);
                 if (name == null || idCard == null || studentId == null || major == null || bell == null) {
                     throw new IOException("Error Occurs at line " + (index + 1) + " Stops");

@@ -9,12 +9,12 @@ public class Student {
     private String idCard;
     private String major;
     private Integer bell;
-    private Integer ems;
+    private String ems;
 
     public Student() {
     }
 
-    public Student(String name, String studentId, String idCard, String major, Integer bell, Integer ems) {
+    public Student(String name, String studentId, String idCard, String major, Integer bell, String ems) {
         this.name = name;
         this.studentId = studentId;
         this.idCard = idCard;
@@ -47,11 +47,11 @@ public class Student {
         this.bell = bell;
     }
 
-    public Integer getEms() {
+    public String getEms() {
         return ems;
     }
 
-    public void setEms(Integer ems) {
+    public void setEms(String ems) {
         this.ems = ems;
     }
 
